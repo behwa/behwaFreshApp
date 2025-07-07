@@ -7,9 +7,11 @@ const pool = new Pool({
   database: process.env.PG_DATABASE || 'myfreshapp',
   password: process.env.PG_PASSWORD || '1234',
   port: process.env.PG_PORT || 5432,
+    // ssl: false,  // Disable SSL
+  // ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
     ssl: {
     rejectUnauthorized: false, // required for DO SSL
-  },
+  }
 });
 
 module.exports = {
