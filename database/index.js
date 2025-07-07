@@ -18,12 +18,12 @@ const pool = new Pool({
   port: process.env.PG_PORT || 5432,
 
   // Below for Development Local PC Database
-  // ssl: false,  // Disable SSL
+  ssl: false,  // Disable SSL
 
   // Below for Production when commit
-  ssl: {
-    rejectUnauthorized: false, // required for DO SSL
-  }
+  // ssl: {
+  //   rejectUnauthorized: false, // required for DO SSL
+  // }
 });
 
 module.exports = {

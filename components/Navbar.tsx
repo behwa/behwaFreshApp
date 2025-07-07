@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
       <div className="container-fluid">
         <Link href="/" passHref>
           <a
-            className="navbar-brand fw-bold d-flex align-items-center gap-2"
+            className="navbar-brand fw-bold d-flex align-items-center gap-2 text-decoration-none"
             aria-label="Go to homepage"
           >
             <img
