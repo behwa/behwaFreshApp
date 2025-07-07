@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
               width="80"
               className="rounded-circle"
             />
-            Task Management App
+            Task Management App!
           </a>
         </Link>
 
