@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TaskList from '../components/TaskList/TaskList';
-// import CreateTask from '../CreateTask';
+// import CreateTask from '../components/CreateTask'; // adjust if your CreateTask path is different
 import { sortTasks } from '../components/TaskList/taskUtils';
 
 interface Task {
@@ -8,7 +8,7 @@ interface Task {
   title: string;
   description: string;
   status: 'Pending' | 'In Progress' | 'Completed';
-  createdtime: string; 
+  createdtime: string;
   createdby: string;
   assignee: string;
 }
@@ -16,40 +16,92 @@ interface Task {
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  // const fetchTasks = async () => {
-  //   try {
-  //     const res = await fetch('/api/tasks');
-  //     if (!res.ok) throw new Error('Failed to fetch tasks');
+  const getToken = () => {
+    const userStr = localStorage.getItem('user');
+    if (!userStr) return '';
+    try {
+      const user = JSON.parse(userStr);
+      return user.token || '';
+    } catch {
+      return '';
+    }
+  };
 
-  //     const data = await res.json();
+  const fetchTasks = async () => {
+    try {
+      const res = await fetch('/api/tasks');
+      if (!res.ok) throw new Error('Failed to fetch tasks');
 
-  //     if (!Array.isArray(data)) return;
+      const data = await res.json();
 
-  //     const tasksWithCreatedBy = data.map((task: any) => ({
-  //       ...task,
-  //       createdby: task.createdby || 'Unknown',
-  //     }));
+      if (!Array.isArray(data)) return;
 
-  //     const sortedTasks = sortTasks(tasksWithCreatedBy, 'createdtime', 'desc');
-  //     setTasks(sortedTasks);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
+      const tasksWithCreatedBy = data.map((task: any) => ({
+        ...task,
+        createdby: task.createdby || 'Unknown',
+      }));
 
-  // useEffect(() => {
-  //   fetchTasks();
-  // }, []);
+      console.log('gimme all my task', tasksWithCreatedBy)
 
-  // handleDelete and handleBulkDelete same, update fetch URLs to relative '/api/tasks'
+      const sortedTasks = sortTasks(tasksWithCreatedBy, 'createdtime', 'desc');
+      setTasks(sortedTasks);
+    } catch (err) {
+      console.error('Error fetching tasks:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    setTasks((prev) => prev.filter((task) => task.id !== id));
+
+    try {
+      const token = getToken();
+
+      const res = await fetch(`/api/tasks/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error(`Failed to delete task ${id}`);
+    } catch (err) {
+      console.error(err);
+      fetchTasks(); // reload tasks on failure
+    }
+  };
+
+  const handleBulkDelete = async (ids: string[]) => {
+    setTasks((prev) => prev.filter((task) => !ids.includes(task.id)));
+
+    try {
+      const token = getToken();
+
+      await Promise.all(
+        ids.map(async (id) => {
+          const res = await fetch(`/api/tasks/${id}`, {
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (!res.ok) throw new Error(`Failed to delete task ${id}`);
+        })
+      );
+    } catch (err) {
+      console.error(err);
+      fetchTasks(); // reload tasks on failure
+    }
+  };
 
   return (
-    <>
-      <div className="container mt-4">
-        {/* <TaskList tasks={tasks} onDelete={handleDelete} onBulkDelete={handleBulkDelete} /> */}
-        <hr />
-        {/* <CreateTask onCreated={fetchTasks} /> */}
-      </div>
-    </>
+    <div className="container mt-4">
+      <TaskList tasks={tasks} onDelete={handleDelete} onBulkDelete={handleBulkDelete} />
+      <hr />
+      {/* <CreateTask onCreated={fetchTasks} /> */}
+    </div>
   );
 }

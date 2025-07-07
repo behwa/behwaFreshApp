@@ -1,6 +1,6 @@
 // components/TaskList/TaskTable.tsx
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 interface Task {
   id: string;
@@ -94,12 +94,20 @@ const TaskTable: React.FC<Props> = ({
                 {task.status === 'In Progress' && <span className="badge bg-info text-dark">In Progress ⏳</span>}
                 {task.status === 'Pending' && <span className="badge bg-warning text-dark">Pending 🕒</span>}
               </td>
-              <td>{new Date(task.createdtime).toLocaleString()}</td>
+              <td>
+                {task.createdtime
+                  ? new Date(task.createdtime).toLocaleString()
+                  : <span className="text-muted">No Date</span>}
+              </td>
               <td>{task.createdby}</td>
               <td>{task.assignee || <span className="text-muted">Unassigned</span>}</td>
               <td>
-                <Link to={`/tasks/view/${task.id}`} className="btn btn-outline-primary btn-sm me-2">View</Link>
-                <Link to={`/tasks/edit/${task.id}`} className="btn btn-outline-primary btn-sm me-2">Edit</Link>
+                <Link href={`/tasks/view/${task.id}`} className="btn btn-outline-primary btn-sm me-2">
+                  View
+                </Link>
+                <Link href={`/tasks/edit/${task.id}`} className="btn btn-outline-primary btn-sm me-2">
+                  Edit
+                </Link>
                 <button className="btn btn-outline-danger btn-sm" onClick={() => onDelete(task.id)}>Delete</button>
               </td>
             </tr>
