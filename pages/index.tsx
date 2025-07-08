@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TaskList from '../components/TaskList/TaskList';
-// import CreateTask from '../components/CreateTask'; // adjust if your CreateTask path is different
+import CreateTask from '../components/CreateTask';
 import { sortTasks } from '../components/TaskList/taskUtils';
 
 interface Task {
@@ -101,7 +101,7 @@ export default function Home() {
     <div className="container mt-4">
       <TaskList tasks={tasks} onDelete={handleDelete} onBulkDelete={handleBulkDelete} />
       <hr />
-      {/* <CreateTask onCreated={fetchTasks} /> */}
+      <CreateTask onCreated={fetchTasks} />
     </div>
   );
 }

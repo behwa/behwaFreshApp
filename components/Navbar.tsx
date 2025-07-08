@@ -42,20 +42,19 @@ const Navbar: React.FC = () => {
       aria-label="Main navigation"
     >
       <div className="container-fluid">
-        <Link href="/" passHref>
-          <a
-            className="navbar-brand fw-bold d-flex align-items-center gap-2 text-decoration-none"
-            aria-label="Go to homepage"
-          >
-            <img
-              src="/zooPic.png"
-              alt="Logo"
-              height="80"
-              width="80"
-              className="rounded-circle"
-            />
-            Task Management App!
-          </a>
+        <Link
+          href="/"
+          className="navbar-brand fw-bold d-flex align-items-center gap-2 text-decoration-none"
+          aria-label="Go to homepage"
+        >
+          <img
+            src="/zooPic.png"
+            alt="Logo"
+            height="80"
+            width="80"
+            className="rounded-circle"
+          />
+          Task Management App!
         </Link>
 
         <button
@@ -76,24 +75,21 @@ const Navbar: React.FC = () => {
           <div className="ms-auto d-flex gap-2 align-items-center">
             {!user ? (
               <>
-                <Link href="/login" passHref>
-                  <a
-                    className={`${styles['btn-nav-link']} ${
-                      isActive('/login') ? styles.active : ''
-                    } btn btn-outline-primary`}
-                  >
-                    Login
-                  </a>
+                <Link
+                  href="/login"
+                  className={`${styles['btn-nav-link']} ${
+                    isActive('/login') ? styles.active : ''
+                  } btn btn-outline-primary`}
+                >
+                  Login
                 </Link>
-
-                <Link href="/signup" passHref>
-                  <a
-                    className={`${styles['btn-nav-link']} ${
-                      isActive('/signup') ? styles.active : ''
-                    } btn btn-primary`}
-                  >
-                    Sign Up
-                  </a>
+                <Link
+                  href="/signup"
+                  className={`${styles['btn-nav-link']} ${
+                    isActive('/signup') ? styles.active : ''
+                  } btn btn-primary`}
+                >
+                  Sign Ups
                 </Link>
               </>
             ) : (
