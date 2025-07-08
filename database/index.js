@@ -22,7 +22,7 @@ const pool = new Pool({
 
   // Below for Production when commit
   ssl: {
-    rejectUnauthorized: false, // required for DO SSL
+    rejectUnauthorized: false, // required for DO SSL TEST
   }
 });
 
